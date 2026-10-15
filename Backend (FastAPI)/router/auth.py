@@ -30,7 +30,7 @@ class CreateUsers(BaseModel):
     lastname : str
     password : str
     role : str
-    # phone_number : str
+    phone_number : str
 
 
 class UpdateUser(BaseModel):
@@ -38,7 +38,7 @@ class UpdateUser(BaseModel):
     username : Optional[str] = Field(default=None)
     firstname : Optional[str] = Field(default=None)
     lastname : Optional[str] = Field(default=None)
-    # phone_number : Optional[str] = Field(default=None)
+    phone_number : Optional[str] = Field(default=None)
 
 
 class UpdatePassword(BaseModel):
@@ -100,7 +100,7 @@ def create_user(db : db_dependency, new_user : CreateUsers):
         hash_password = bcrypt_context.hash(new_user.password),
         is_active = True,
         role = new_user.role,
-        # phone_number = new_user.phone_number
+        phone_number = new_user.phone_number
     )
 
     db.add(user_model)

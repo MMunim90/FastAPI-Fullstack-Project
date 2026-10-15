@@ -3,7 +3,7 @@ from typing import Annotated, Optional
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, Field
 import models
-from models import Users, Books
+from models import Users, Books, Reservations
 from database import engine, SessionLocal
 from fastapi.responses import JSONResponse
 from router import admin, auth
@@ -47,6 +47,29 @@ def get_all_books(user: user_dependency, db: db_dependency, book_id: int):
     if book is None:
         raise HTTPException(status_code=404, detail='Book not found')
     return book
+
+
+@app.post('/reserve/{book_id}')
+def reserve_book(user: user_dependency, db: db_dependency, book_id: int):
+    
+    if user is None:
+        raise HTTPException(status_code=401, detail='Failed Authentication')
+    
+    book = db.query(Books).filter(Books.id == book_id).first()
+        
+    if book is None:
+        raise HTTPException(status_code=404, detail='Book not found')
+    
+    reservation_model = Reservations(
+        book_id = book_id,
+        user_id = user.get('id'),
+        status = 'pending'
+    )
+    
+    db.add(reservation_model)
+    db.commit()
+    
+    return JSONResponse(status_code=201, content={'message': 'Book reserved'})
 
 
 @app.get('/user_profile')
