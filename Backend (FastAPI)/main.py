@@ -72,6 +72,37 @@ def reserve_book(user: user_dependency, db: db_dependency, book_id: int):
     return JSONResponse(status_code=201, content={'message': 'Book reserved'})
 
 
+@app.delete('/reserve/{reservation_id}')
+def cancel_reservation(user: user_dependency, db: db_dependency, reservation_id: int):
+    
+    if user is None:
+        raise HTTPException(status_code=401, detail='Failed Authentication')
+    
+    reservation = db.query(Reservations).filter(Reservations.id == reservation_id).first()
+        
+    if reservation is None:
+        raise HTTPException(status_code=404, detail='Reservation not found')
+    
+    reservation.status = 'cancelled'
+    db.commit()
+    
+    return JSONResponse(status_code=201, content={'message': 'Reservation cancelled successfully'})
+
+
+@app.get('/reserve/my')
+def my_reservation(user: user_dependency, db: db_dependency):
+    
+    if user is None:
+        raise HTTPException(status_code=401, detail='Failed Authentication')
+    
+    reservations = db.query(Reservations).filter(Reservations.user_id == user.get('id')).all()
+        
+    if reservations is None:
+        raise HTTPException(status_code=404, detail='No reservation created yet')
+    
+    return reservations
+
+
 @app.get('/user_profile')
 def get_user_profile(user : user_dependency, db : db_dependency):
 
