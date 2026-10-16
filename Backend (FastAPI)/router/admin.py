@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
-from models import Users, Books, Reservations
+from models import Users, Books, Reservations, IssueRecords
 from fastapi.responses import JSONResponse
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
@@ -9,6 +9,7 @@ from database import SessionLocal
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import jwt, JWTError
 from router.auth import get_current_user
+from datetime import timedelta, datetime, timezone
 
 router = APIRouter()
 
@@ -28,6 +29,11 @@ class BookUpdate(BaseModel):
     price : Optional[float] = Field(default=None)
     total_copies : Optional[int] = Field(default=None)
     available_copies : Optional[int] = Field(default=None)
+    
+    
+class IssueBook(BaseModel):
+    book_id: int
+    user_id: int
 
 def get_db():
     db = SessionLocal()
@@ -93,3 +99,50 @@ def delete_book(user: user_dependency, db: db_dependency, book_id: int):
     db.commit()
     
     return JSONResponse(status_code=200, content={'message': 'Book deleted successfully!'})
+
+
+@router.post('/admin/create_issue')
+def create_issue(user: user_dependency, db: db_dependency, issue_request: IssueBook):
+    
+    if user is None or user.get('role') != 'librarian':
+        raise HTTPException(status_code=401, detail='Failed Authentication')
+    
+    book = db.query(Books).filter(Books.id == issue_request.book_id).first()
+    
+    if book is None:
+        raise HTTPException(status_code=404, detail='Book not found!')
+    
+    member = db.query(Users).filter(Users.id == issue_request.user_id).first()
+        
+    if member is None:
+        raise HTTPException(status_code=404, detail='Member not found!')
+    
+    if book.available_copies <= 0:
+        raise HTTPException(status_code=400, detail='No copies available!')
+    
+    loan_days = 14
+    issue_date = datetime.now
+    
+    issue_model = IssueRecords(
+        book_id = issue_request.book_id,
+        user_id = issue_request.user_id,
+        issue_date = issue_date,
+        due_date = issue_date + timedelta(days=loan_days),
+        status = 'issued'
+    )
+    
+    book.available_copies -= 1
+    
+    reservation = db.query(Reservations).filter(
+        Reservations.book_id == issue_request.book_id,
+        Reservations.user_id == issue_request.user_id,
+        Reservations.status == 'pending'
+    )
+    
+    if reservation is not None:
+        reservation.status = 'approved'
+    
+    db.add(issue_model)
+    db.commit()
+    
+    return JSONResponse(status_code=201, content={'message': 'Book issued successfully'})
