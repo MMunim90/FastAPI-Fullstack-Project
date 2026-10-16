@@ -37,7 +37,7 @@ def get_all_books(user: user_dependency, db: db_dependency):
 
 
 @app.get('/books/{book_id}')
-def get_all_books(user: user_dependency, db: db_dependency, book_id: int):
+def get_specific_books(user: user_dependency, db: db_dependency, book_id: int):
     
     if user is None:
         raise HTTPException(status_code=401, detail='Failed Authentication')
