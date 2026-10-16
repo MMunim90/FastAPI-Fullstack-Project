@@ -212,7 +212,7 @@ Currently under development.
 **Munim**
 
 - GitHub: [@MMunim90](https://github.com/MMunim90)
-- LinkedIn: [Your LinkedIn Profile](https://www.linkedin.com/in/m-munim)
+- LinkedIn: [MD. SHAHAN AL MUNIM](https://www.linkedin.com/in/m-munim)
 
 ## 📄 License
 
