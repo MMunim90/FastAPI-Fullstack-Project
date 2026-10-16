@@ -1,4 +1,4 @@
-# Project Name
+# Library Management System
 
 A full-stack web application built with React, FastAPI, and Supabase PostgreSQL.
 
@@ -8,13 +8,14 @@ A full-stack web application built with React, FastAPI, and Supabase PostgreSQL.
 - React
 - JavaScript
 - HTML5 & CSS3
-- Tailwind CSS (if used)
+- Tailwind CSS
+- Daisy UI
 
 ### Backend
 - Python
 - FastAPI
 - Pydantic
-- SQLAlchemy (if used)
+- SQLAlchemy 
 
 ### Database
 - Supabase
