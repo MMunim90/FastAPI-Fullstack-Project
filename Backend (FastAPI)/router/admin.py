@@ -46,6 +46,15 @@ db_dependency = Annotated[Session, Depends(get_db)]
 user_dependency = Annotated[dict, Depends(get_current_user)]
 
 
+FINE_PER_DAY = 30
+def calculate_fine(due_date: datetime, return_date: datetime):
+    overdue_days = (return_date.date() - due_date.date()).days
+    if overdue_days > 0:
+        return round(overdue_days*FINE_PER_DAY, 2)
+    else:
+        return 0.0
+
+
 @router.post('/admin/create_book')
 def create_book(user: user_dependency, db: db_dependency, new_book: BookCreate):
     
@@ -146,3 +155,30 @@ def create_issue(user: user_dependency, db: db_dependency, issue_request: IssueB
     db.commit()
     
     return JSONResponse(status_code=201, content={'message': 'Book issued successfully'})
+
+
+@router.put('/admin/return_book/{issue_id}')
+def return_book(user: user_dependency, db: db_dependency, issue_id: int):
+    
+    if user is None or user.get('role') != 'librarian':
+        raise HTTPException(status_code=401, detail='Failed Authentication')
+    
+    issue = db.query(IssueRecords).filter(IssueRecords.id == issue_id).first()
+    
+    if issue is None:
+        raise HTTPException(status_code=404, detail='Issue record not found!')
+    
+    return_date = datetime.now
+    fine = calculate_fine(issue.due_date, return_date)
+    
+    issue.return_date = return_date
+    issue.status = 'returned'
+    issue.fine_amount = fine
+    
+    book = db.query(Books).filter(Books.id == issue.book_id).first()
+    if book is not None:
+        book.available_copies += 1
+        
+    db.commit()
+    
+    return JSONResponse(status_code=200, content={'message': 'Book returned successfully', 'Fine amount': fine})
