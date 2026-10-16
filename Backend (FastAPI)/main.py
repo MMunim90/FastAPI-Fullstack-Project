@@ -3,7 +3,7 @@ from typing import Annotated, Optional
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, Field
 import models
-from models import Users, Books, Reservations
+from models import Users, Books, Reservations, IssueRecords
 from database import engine, SessionLocal
 from fastapi.responses import JSONResponse
 from router import admin, auth
@@ -101,6 +101,21 @@ def my_reservation(user: user_dependency, db: db_dependency):
         raise HTTPException(status_code=404, detail='No reservation created yet')
     
     return reservations
+
+
+@app.get('/issues/my')
+def my_issued_books(user: user_dependency, db: db_dependency):
+    
+    if user is None:
+        raise HTTPException(status_code=401, detail='Failed Authentication')
+    
+    issues = db.query(IssueRecords).filter(IssueRecords.user_id == user.get('id'), IssueRecords.status == 'issued').all()
+        
+    if issues is None:
+        raise HTTPException(status_code=404, detail='No issued books found')
+    
+    return issues
+
 
 
 @app.get('/user_profile')

@@ -182,3 +182,21 @@ def return_book(user: user_dependency, db: db_dependency, issue_id: int):
     db.commit()
     
     return JSONResponse(status_code=200, content={'message': 'Book returned successfully', 'Fine amount': fine})
+
+
+@router.put('/admin/fine/pay/{issue_id}')
+def fine_paid(user: user_dependency, db: db_dependency, issue_id: int):
+    
+    if user is None or user.get('role') != 'librarian':
+        raise HTTPException(status_code=401, detail='Failed Authentication')
+    
+    issue = db.query(IssueRecords).filter(IssueRecords.id == issue_id).first()
+    
+    if issue is None:
+        raise HTTPException(status_code=404, detail='Issue record not found!')
+    
+    issue.fine_amount = 0.0
+    issue.fine_paid = True
+    db.commit()
+    
+    return JSONResponse(status_code=200, content={'message': 'Fine paid successfully'})
