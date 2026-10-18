@@ -75,6 +75,8 @@ def remove_user(user: user_dependency, db: db_dependency, user_id: int):
     if user is None:
         raise HTTPException(status_code=404, detail='User not found!')
     
+    db.query(Reservations).filter(Reservations.user_id == user_id).delete()
+    db.query(IssueRecords).filter(IssueRecords.user_id == user_id).delete()
     db.query(Users).filter(Users.id == user_id).delete()
         
     db.commit()
