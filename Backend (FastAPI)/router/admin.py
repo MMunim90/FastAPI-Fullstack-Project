@@ -53,6 +53,33 @@ def calculate_fine(due_date: datetime, return_date: datetime):
         return round(overdue_days*FINE_PER_DAY, 2)
     else:
         return 0.0
+    
+    
+@router.get('/admin/users/all')
+def get_all_users(user: user_dependency, db: db_dependency):
+    
+    if user is None or user.get('role') != 'librarian':
+        raise HTTPException(status_code=401, detail='Failed Authentication')
+    
+    users = db.query(Users).all()
+    return users
+
+
+@router.delete('/admin/remove_user/{user_id}')
+def remove_user(user: user_dependency, db: db_dependency, user_id: int):
+    
+    if user is None or user.get('role') != 'librarian':
+        raise HTTPException(status_code=401, detail='Failed Authentication')
+    
+    user = db.query(Users).filter(Users.id == user_id).first()
+    if user is None:
+        raise HTTPException(status_code=404, detail='User not found!')
+    
+    db.query(Users).filter(Users.id == user_id).delete()
+        
+    db.commit()
+    
+    return JSONResponse(status_code=200, content={'message': 'User removed successfully!'})
 
 
 @router.post('/admin/create_book')
