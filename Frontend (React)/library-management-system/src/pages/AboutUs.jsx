@@ -254,7 +254,7 @@ const AboutUs = () => {
           </p>
 
           <Link
-            to="/books"
+            to="/allBooks"
             className="btn mt-7 bg-blue-300 hover:bg-blue-200 text-slate-950 border-0"
           >
             Browse Our Collection

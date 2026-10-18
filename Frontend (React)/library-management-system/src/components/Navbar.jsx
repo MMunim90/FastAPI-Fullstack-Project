@@ -32,7 +32,7 @@ const Navbar = () => {
             <li>
               <Link to={'/allBooks'}>All Books</Link>
             </li>
-            <li>
+            <li className="aura">
               <Link to={'/about'}>About Us</Link>
             </li>
             <li>

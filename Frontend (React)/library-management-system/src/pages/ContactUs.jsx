@@ -71,11 +71,16 @@ const ContactUs = () => {
   return (
     <main className="min-h-screen bg-base-100">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-900 text-white">
-        <div className="absolute -top-24 -right-20 w-80 h-80 rounded-full bg-blue-400/10 blur-3xl" />
-        <div className="absolute -bottom-32 -left-20 w-80 h-80 rounded-full bg-indigo-400/10 blur-3xl" />
+      <section
+        className="relative overflow-hidden bg-cover bg-center bg-no-repeat text-white"
+        style={{
+          backgroundImage:
+            "url(https://images.unsplash.com/photo-1545306494-c7a70879bbd3?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D)",
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/70 via-blue-950/40 to-gray-900"></div>
 
-        <div className="relative max-w-7xl mx-auto px-6 py-20 md:py-28">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 md:py-28">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-blue-300/20 bg-white/5 px-4 py-2 text-sm text-blue-200 mb-7">
               <MessageSquare size={17} className="text-blue-300" />
@@ -288,7 +293,7 @@ const ContactUs = () => {
           </div>
 
           <Link
-            to="/books"
+            to="/allBooks"
             className="btn bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-900 text-white border-0"
           >
             Explore Books
@@ -298,7 +303,6 @@ const ContactUs = () => {
       </section>
     </main>
   );
-}
-
+};
 
 export default ContactUs;
