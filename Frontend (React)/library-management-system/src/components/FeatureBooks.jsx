@@ -61,7 +61,13 @@ const FeatureBooks = () => {
             </div>
           );
         })}
-        <div className="card border-2">
+        <div
+          className="card border-2 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(15, 23, 42, 0.5), rgba(15, 23, 42, 0.5)), url('https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D')",
+          }}
+        >
           <div className="card-body justify-center m-auto">
             <button className="btn btn-primary">View all</button>
           </div>

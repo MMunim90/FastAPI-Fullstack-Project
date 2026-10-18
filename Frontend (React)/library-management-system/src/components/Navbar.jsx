@@ -1,3 +1,7 @@
+import { Link } from "react-router";
+import Login from "../pages/Login";
+import SignUp from "../pages/SignUp";
+
 const Navbar = () => {
   return (
     <div className="navbar bg-base-100 shadow-sm">
@@ -26,51 +30,64 @@ const Navbar = () => {
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
           >
             <li>
-              <a>Item 1</a>
+              <Link to={'/allBooks'}>All Books</Link>
             </li>
             <li>
-              <a>Parent</a>
-              <ul className="p-2">
-                <li>
-                  <a>Submenu 1</a>
-                </li>
-                <li>
-                  <a>Submenu 2</a>
-                </li>
-              </ul>
+              <Link to={'/about'}>About Us</Link>
             </li>
             <li>
-              <a>Item 3</a>
+              <Link to={'/contact'}>Contact Us</Link>
             </li>
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl"><img className="h-9 w-9" src="../../public/icon.png" alt="" />LibraryHub</a>
+        <Link to={'/'} className="btn btn-ghost text-xl">
+          <img className="h-9 w-9" src="../../public/icon.png" alt="" />
+          LibraryHub
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <a>Item 1</a>
+            <Link to={'/allBooks'}>All Books</Link>
           </li>
           <li>
-            <details>
-              <summary>Parent</summary>
-              <ul className="p-2 bg-base-100 w-40 z-1">
-                <li>
-                  <a>Submenu 1</a>
-                </li>
-                <li>
-                  <a>Submenu 2</a>
-                </li>
-              </ul>
-            </details>
+            <Link to={'/about'}>About Us</Link>
           </li>
           <li>
-            <a>Item 3</a>
+            <Link to={'/contact'}>Contact Us</Link>
           </li>
         </ul>
       </div>
       <div className="navbar-end">
-        <a className="btn">Button</a>
+        {/* Login Button */}
+        <button
+          className="btn btn-primary"
+          onClick={() => document.getElementById("my_modal_3").showModal()}
+        >
+          Login
+        </button>
+
+        {/* Login Modal */}
+        <dialog
+          id="my_modal_3"
+          className="modal modal-bottom sm:modal-middle p-2"
+        >
+          <Login />
+          <form method="dialog" className="modal-backdrop">
+            <button>close</button>
+          </form>
+        </dialog>
+
+        {/* Signup Modal */}
+        <dialog
+          id="signup_modal"
+          className="modal modal-bottom sm:modal-middle p-2"
+        >
+          <SignUp />
+          <form method="dialog" className="modal-backdrop">
+            <button>close</button>
+          </form>
+        </dialog>
       </div>
     </div>
   );
