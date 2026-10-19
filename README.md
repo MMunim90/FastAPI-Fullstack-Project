@@ -89,8 +89,8 @@ Make sure you have installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY.git
-cd YOUR-REPOSITORY
+git clone https://github.com/MMunim90/FastAPI-Fullstack-Project.git
+cd FastAPI-Fullstack-Project
 ```
 
 ### 2. Set Up the Backend

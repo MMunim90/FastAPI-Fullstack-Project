@@ -8,8 +8,20 @@ from database import engine, SessionLocal
 from fastapi.responses import JSONResponse
 from router import admin, auth
 from router.auth import get_current_user
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 models.Base.metadata.create_all(bind=engine)
 app.include_router(auth.router)
@@ -25,15 +37,24 @@ def get_db():
 db_dependency = Annotated[Session, Depends(get_db)]
 user_dependency = Annotated[dict, Depends(get_current_user)]
 
-
+# this route is for testing purpose
 @app.get('/books/all')
-def get_all_books(user: user_dependency, db: db_dependency):
+def get_all_books(db: db_dependency):
     
-    if user is None:
-        raise HTTPException(status_code=401, detail='Failed Authentication')
     
     books = db.query(Books).all()
     return books
+
+
+# main get all books route
+# @app.get('/books/all')
+# def get_all_books(user: user_dependency, db: db_dependency):
+    
+#     if user is None:
+#         raise HTTPException(status_code=401, detail='Failed Authentication')
+    
+#     books = db.query(Books).all()
+#     return books
 
 
 @app.get('/books/{book_id}')
