@@ -129,7 +129,7 @@ DATABASE_URL=your_supabase_postgresql_connection_string
 Start the FastAPI server:
 
 ```bash
-uvicorn app.main:app --reload
+uvicorn main:app --reload
 ```
 
 The backend will run at:
