@@ -1,4 +1,45 @@
+import { useState } from "react";
+import { baseURL } from "../services/BaseURL";
+import { Eye, EyeOff } from "lucide-react";
+
 const SignUp = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    username: "",
+    email: "",
+    phone_number: "",
+    password: "",
+    role: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // console.log(formData);
+
+    const res = await fetch(`${baseURL}/create_user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await res.json();
+    console.log(data);
+  };
+
   return (
     <div className="modal-box relative max-w-lg rounded-2xl p-8 shadow-2xl">
       {/* Close Button */}
@@ -17,7 +58,7 @@ const SignUp = () => {
       </div>
 
       {/* Signup Form */}
-      <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
+      <form className="space-y-3" onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {/* First Name */}
           <fieldset className="fieldset">
@@ -27,6 +68,8 @@ const SignUp = () => {
               name="firstname"
               className="input input-bordered w-full"
               placeholder="First name"
+              value={formData.firstname}
+              onChange={handleChange}
               required
             />
           </fieldset>
@@ -39,6 +82,8 @@ const SignUp = () => {
               name="lastname"
               className="input input-bordered w-full"
               placeholder="Last name"
+              value={formData.lastname}
+              onChange={handleChange}
               required
             />
           </fieldset>
@@ -53,6 +98,8 @@ const SignUp = () => {
             className="input input-bordered w-full"
             placeholder="Choose a username"
             autoComplete="username"
+            value={formData.username}
+            onChange={handleChange}
             required
           />
         </fieldset>
@@ -66,6 +113,8 @@ const SignUp = () => {
             className="input input-bordered w-full"
             placeholder="Enter your email"
             autoComplete="email"
+            value={formData.email}
+            onChange={handleChange}
             required
           />
         </fieldset>
@@ -79,6 +128,8 @@ const SignUp = () => {
             className="input input-bordered w-full"
             placeholder="Enter your phone number"
             autoComplete="tel"
+            value={formData.phone_number}
+            onChange={handleChange}
             required
           />
         </fieldset>
@@ -86,15 +137,29 @@ const SignUp = () => {
         {/* Password */}
         <fieldset className="fieldset">
           <label className="label">Password</label>
-          <input
-            type="password"
-            name="password"
-            className="input input-bordered w-full"
-            placeholder="Create a password"
-            autoComplete="new-password"
-            minLength={8}
-            required
-          />
+
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              className="input input-bordered w-full pr-12"
+              placeholder="Create a password"
+              autoComplete="new-password"
+              minLength={8}
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-300 transition-colors"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
         </fieldset>
 
         {/* Role */}
@@ -103,7 +168,8 @@ const SignUp = () => {
           <select
             name="role"
             className="select select-bordered w-full"
-            defaultValue=""
+            value={formData.role}
+            onChange={handleChange}
             required
           >
             <option value="" disabled>
@@ -134,6 +200,7 @@ const SignUp = () => {
           Login
         </button>
       </div>
+
       {/* Click Outside to Close */}
       <form method="dialog" className="modal-backdrop">
         <button>close</button>

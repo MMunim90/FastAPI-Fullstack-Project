@@ -1,4 +1,8 @@
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
+
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <div className="modal-box relative max-w-md rounded-2xl p-8 shadow-2xl">
       {/* Close Button */}
@@ -28,12 +32,25 @@ const Login = () => {
           />
 
           <label className="label mt-2 font-medium">Password</label>
-          <input
-            type="password"
-            className="input input-bordered w-full"
-            placeholder="Enter your password"
-            required
-          />
+
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              className="input input-bordered w-full pr-12"
+              placeholder="Enter your password"
+              required
+            />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-500"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
 
           {/* <div className="mt-2 text-right">
             <a

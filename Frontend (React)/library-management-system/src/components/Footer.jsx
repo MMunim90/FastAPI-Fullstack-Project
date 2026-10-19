@@ -9,7 +9,7 @@ const Footer = () => {
         <p className="text-2xl font-bold">LibraryHub</p>
         <p>Copyright © {new Date().getFullYear()} - All right reserved</p>
       </aside>
-      <aside className="m-auto">
+      <aside className="md:m-auto">
         <Link
           to="/about"
           className="flex items-center gap-2 hover:text-blue-300 transition-colors"
