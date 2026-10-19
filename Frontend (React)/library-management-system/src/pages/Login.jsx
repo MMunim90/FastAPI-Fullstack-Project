@@ -1,8 +1,42 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { baseURL } from "../services/BaseURL";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    
+    try {
+      // username=munim&password=12345
+
+      const formData = new URLSearchParams();
+
+      formData.append("username", username)
+      formData.append("password", password)
+
+      const res = await fetch(`${baseURL}/login`, {
+        method: "POST",
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: formData
+      })
+
+      const data = await res.json()
+      console.log(data)
+
+      const accessToken = data?.access_token;
+
+      localStorage.setItem("user_token", accessToken);
+      
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
   return (
     <div className="modal-box relative max-w-md rounded-2xl p-8 shadow-2xl">
       {/* Close Button */}
@@ -21,7 +55,7 @@ const Login = () => {
       </div>
 
       {/* Login Form */}
-      <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+      <form className="space-y-4" onSubmit={handleLogin}>
         <fieldset className="fieldset">
           <label className="label font-medium">Username</label>
           <input
@@ -29,6 +63,7 @@ const Login = () => {
             className="input input-bordered w-full"
             placeholder="Enter your username"
             required
+            value={username} onChange={(e) => setUsername(e.target.value)}
           />
 
           <label className="label mt-2 font-medium">Password</label>
@@ -40,6 +75,7 @@ const Login = () => {
               className="input input-bordered w-full pr-12"
               placeholder="Enter your password"
               required
+              value={password} onChange={(e) => setPassword(e.target.value)}
             />
 
             <button
