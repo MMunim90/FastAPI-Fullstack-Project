@@ -31,6 +31,16 @@ const Login = () => {
       const accessToken = data?.access_token;
 
       localStorage.setItem("user_token", accessToken);
+
+      const userRes = await fetch(`${baseURL}/user_profile`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+
+      const userData = await userRes.json()
+
+      console.log(userData)
       
     } catch (error) {
       console.log(error)
