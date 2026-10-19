@@ -4,29 +4,34 @@ import Home from "../pages/Home";
 import AboutUs from "../pages/AboutUs";
 import ContactUs from "../pages/ContactUs";
 import AllBooks from "../pages/AllBooks";
+import ErrorPage from "../pages/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root/>,
+    element: <Root />,
     children: [
-        {
-            path: '/',
-            element: <Home/>
-        },
-        {
-            path: '/about',
-            element: <AboutUs/>
-        },
-        {
-            path: '/contact',
-            element: <ContactUs/>
-        },
-        {
-            path: '/allBooks',
-            element: <AllBooks/>
-        },
-    ]
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/about",
+        element: <AboutUs />,
+      },
+      {
+        path: "/contact",
+        element: <ContactUs />,
+      },
+      {
+        path: "/allBooks",
+        element: <AllBooks />,
+      },
+    ],
+  },
+  {
+    path: "/*",
+    element: <ErrorPage />,
   },
 ]);
 

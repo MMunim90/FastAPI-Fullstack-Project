@@ -1,11 +1,30 @@
+import { Link } from "react-router";
+import { Info, Mail } from "lucide-react";
+
 const Footer = () => {
   return (
-    <footer className="footer sm:footer-horizontal mt-10 text-neutral-content p-10 border-t-1">
+    <footer className="footer sm:footer-horizontal mt-10 p-10 border-t-1">
       <aside>
         <img className="h-25 w-25" src="../../public/icon.png" alt="" />
         <p className="text-2xl font-bold">LibraryHub</p>
-        <p>
-          Copyright © {new Date().getFullYear()} - All right reserved</p>
+        <p>Copyright © {new Date().getFullYear()} - All right reserved</p>
+      </aside>
+      <aside className="m-auto">
+        <Link
+          to="/about"
+          className="flex items-center gap-2 hover:text-blue-300 transition-colors"
+        >
+          <Info size={18} className="text-blue-300" />
+          <p>About Us</p>
+        </Link>
+
+        <Link
+          to="/contact"
+          className="flex items-center gap-2 hover:text-blue-300 transition-colors"
+        >
+          <Mail size={18} className="text-blue-300" />
+          <p>Contact</p>
+        </Link>
       </aside>
     </footer>
   );

@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
+import { BookOpen, Info, Mail } from "lucide-react";
 
 const Navbar = () => {
   return (
@@ -30,17 +31,28 @@ const Navbar = () => {
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
           >
             <li>
-              <Link to={'/allBooks'}>All Books</Link>
+              <Link to="/allBooks" className="flex items-center gap-2">
+                <BookOpen size={18} className="text-blue-300" />
+                All Books
+              </Link>
             </li>
-            <li className="aura">
-              <Link to={'/about'}>About Us</Link>
-            </li>
+
             <li>
-              <Link to={'/contact'}>Contact Us</Link>
+              <Link to="/about" className="flex items-center gap-2">
+                <Info size={18} className="text-blue-300" />
+                About Us
+              </Link>
+            </li>
+
+            <li>
+              <Link to="/contact" className="flex items-center gap-2">
+                <Mail size={18} className="text-blue-300" />
+                Contact
+              </Link>
             </li>
           </ul>
         </div>
-        <Link to={'/'} className="btn btn-ghost text-xl">
+        <Link to={"/"} className="btn btn-ghost text-xl">
           <img className="h-9 w-9" src="../../public/icon.png" alt="" />
           LibraryHub
         </Link>
@@ -48,13 +60,24 @@ const Navbar = () => {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <Link to={'/allBooks'}>All Books</Link>
+            <Link to="/allBooks" className="flex items-center gap-2">
+              <BookOpen size={18} className="text-blue-300" />
+              All Books
+            </Link>
           </li>
+
           <li>
-            <Link to={'/about'}>About Us</Link>
+            <Link to="/about" className="flex items-center gap-2">
+              <Info size={18} className="text-blue-300" />
+              About Us
+            </Link>
           </li>
+
           <li>
-            <Link to={'/contact'}>Contact Us</Link>
+            <Link to="/contact" className="flex items-center gap-2">
+              <Mail size={18} className="text-blue-300" />
+              Contact
+            </Link>
           </li>
         </ul>
       </div>
