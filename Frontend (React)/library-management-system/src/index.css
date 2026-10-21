@@ -1,2 +1,57 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+.libraryhub-swal {
+  background: linear-gradient(
+    to bottom right,
+    #0f172a,
+    #172554,
+    #312e81
+  ) !important;
+  border: 1px solid #3b82f6;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(37, 99, 235, 0.2);
+}
+
+.libraryhub-swal-title {
+  color: #dbeafe !important;
+}
+
+.libraryhub-swal-button {
+  border-radius: 10px !important;
+  padding: 10px 24px !important;
+  font-weight: 600 !important;
+}
+
+
+.libraryhub-toast {
+  background: linear-gradient(
+    to bottom right,
+    #0f172a,
+    #172554,
+    #312e81
+  ) !important;
+
+  color: #e2e8f0 !important;
+  border: 1px solid #3b82f6;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2);
+}
+
+.libraryhub-toast .Toastify__toast-icon svg {
+  fill: #f87171;
+}
+
+.libraryhub-toast .Toastify__close-button {
+  color: #bfdbfe;
+  opacity: 0.8;
+}
+
+.libraryhub-toast .Toastify__close-button:hover {
+  color: #ffffff;
+  opacity: 1;
+}
+
+.libraryhub-toast-progress {
+  background: #60a5fa !important;
+}

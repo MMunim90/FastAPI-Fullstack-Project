@@ -1,32 +1,36 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { baseURL } from "../services/BaseURL";
+import { AuthContext } from "../context/AuthContext";
+import Swal from "sweetalert2";
+import { Bounce, toast } from "react-toastify";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const { authUser, setAuthUser } = useContext(AuthContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    
+
     try {
       // username=munim&password=12345
 
       const formData = new URLSearchParams();
 
-      formData.append("username", username)
-      formData.append("password", password)
+      formData.append("username", username);
+      formData.append("password", password);
 
       const res = await fetch(`${baseURL}/login`, {
         method: "POST",
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: formData
-      })
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formData,
+      });
 
-      const data = await res.json()
-      console.log(data)
+      const data = await res.json();
+      // console.log(data)
 
       const accessToken = data?.access_token;
 
@@ -34,19 +38,51 @@ const Login = () => {
 
       const userRes = await fetch(`${baseURL}/user_profile`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      })
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
 
-      const userData = await userRes.json()
+      const userData = await userRes.json();
 
-      console.log(userData)
-      
+      setAuthUser(userData);
+
+      if (userData.detail == "User Not Found!!!") {
+        toast.error("User Not Found!!!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "dark",
+          transition: Bounce,
+          className: "libraryhub-toast",
+          progressClassName: "libraryhub-toast-progress",
+        });
+        return;
+      } else {
+        document.getElementById("my_modal_3").close();
+        Swal.fire({
+          icon: "success",
+          title: "Hey...",
+          text: "Login successful!!!",
+          background: "#0f172a",
+          color: "#e2e8f0",
+          confirmButtonColor: "#60a5fa",
+          iconColor: "#60a5fa",
+          customClass: {
+            popup: "libraryhub-swal",
+            title: "libraryhub-swal-title",
+            confirmButton: "libraryhub-swal-button",
+          },
+        });
+      }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
+  };
 
-  }
+  // console.log(authUser);
   return (
     <div className="modal-box relative max-w-md rounded-2xl p-8 shadow-2xl">
       {/* Close Button */}
@@ -73,7 +109,8 @@ const Login = () => {
             className="input input-bordered w-full"
             placeholder="Enter your username"
             required
-            value={username} onChange={(e) => setUsername(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
 
           <label className="label mt-2 font-medium">Password</label>
@@ -85,7 +122,8 @@ const Login = () => {
               className="input input-bordered w-full pr-12"
               placeholder="Enter your password"
               required
-              value={password} onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
 
             <button

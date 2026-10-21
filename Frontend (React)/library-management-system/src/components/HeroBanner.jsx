@@ -14,7 +14,7 @@ const HeroBanner = () => {
           <p className="mb-5">
             Discover, explore, and manage books effortlessly with our smart Library Management System. Get your favorite books, track borrowing and returns, and enjoy a seamless library experience—all in one place.
           </p>
-          <button className="btn btn-primary">Get Started</button>
+          {/* <button className="btn btn-primary">Get Started</button> */}
         </div>
       </div>
     </div>

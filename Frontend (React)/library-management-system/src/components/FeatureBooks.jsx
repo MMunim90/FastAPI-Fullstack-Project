@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { baseURL } from "../services/BaseURL";
 import BookCard from "./BookCard";
+import { Link } from "react-router";
 
 const FeatureBooks = () => {
   const [featureBooks, setFeatureBooks] = useState([]);
@@ -69,7 +70,7 @@ const FeatureBooks = () => {
           }}
         >
           <div className="card-body justify-center m-auto">
-            <button className="btn btn-primary">View all</button>
+            <Link to={'/allBooks'}><button className="btn btn-primary">View all</button></Link>
           </div>
         </div>
       </div>
