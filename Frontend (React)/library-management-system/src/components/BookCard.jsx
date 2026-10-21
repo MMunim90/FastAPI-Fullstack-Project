@@ -1,7 +1,8 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { Link } from "react-router";
 
-const BookCard = ({ book, onViewDetails }) => {
+const BookCard = ({ book }) => {
   const {
     title,
     author,
@@ -128,18 +129,17 @@ const BookCard = ({ book, onViewDetails }) => {
         {/* Action */}
         {authUser ? (
           <div className="card-actions mt-2">
-            <button
-              onClick={() => onViewDetails?.(book)}
-              className="btn btn-primary w-full group/btn"
-            >
-              View Details
-              <span
-                className="transition-transform
+            <Link to={`/books/${book.id}`} className="w-full">
+              <button className="btn btn-primary w-full group/btn">
+                View Details
+                <span
+                  className="transition-transform
                              group-hover/btn:translate-x-1"
-              >
-                →
-              </span>
-            </button>
+                >
+                  →
+                </span>
+              </button>
+            </Link>
           </div>
         ) : (
           <div className="card-actions mt-2">

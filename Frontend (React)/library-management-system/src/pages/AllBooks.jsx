@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   Search,
-  BookOpen,
   Library,
   SlidersHorizontal,
   RefreshCw,
@@ -120,7 +119,7 @@ const AllBooks = () => {
 
             <div className="flex w-full items-center gap-4 rounded-2xl border border-blue-400/20 bg-slate-900/50 p-5 shadow-xl shadow-black/10 backdrop-blur-md md:w-auto md:min-w-64">
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-blue-400/10 text-blue-300">
-                <BookOpen size={28} />
+                <img className="h-11 w-11" src="../../public/icon.png" alt="" />
               </div>
 
               <div>
@@ -311,10 +310,7 @@ const AllBooks = () => {
               </p>
             </div>
 
-            <BookOpen
-              size={44}
-              className="hidden shrink-0 text-blue-300/70 sm:block"
-            />
+            <img className="h-20 w-20 hidden shrink-0 text-blue-300/70 sm:block" src="../../public/icon.png" alt="" />
           </div>
         </div>
       </section>
