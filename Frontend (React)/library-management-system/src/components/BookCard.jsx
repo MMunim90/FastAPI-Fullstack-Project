@@ -1,3 +1,6 @@
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+
 const BookCard = ({ book, onViewDetails }) => {
   const {
     title,
@@ -11,6 +14,12 @@ const BookCard = ({ book, onViewDetails }) => {
   } = book;
 
   const firstLetter = title?.trim().charAt(0).toUpperCase() || "B";
+
+  const { authUser } = useContext(AuthContext);
+
+  const showLoginModal = () => {
+    document.getElementById("my_modal_3").showModal();
+  };
 
   return (
     <div
@@ -117,20 +126,38 @@ const BookCard = ({ book, onViewDetails }) => {
         </div>
 
         {/* Action */}
-        <div className="card-actions mt-2">
-          <button
-            onClick={() => onViewDetails?.(book)}
-            className="btn btn-primary w-full group/btn"
-          >
-            View Details
-            <span
-              className="transition-transform
-                             group-hover/btn:translate-x-1"
+        {authUser ? (
+          <div className="card-actions mt-2">
+            <button
+              onClick={() => onViewDetails?.(book)}
+              className="btn btn-primary w-full group/btn"
             >
-              →
-            </span>
-          </button>
-        </div>
+              View Details
+              <span
+                className="transition-transform
+                             group-hover/btn:translate-x-1"
+              >
+                →
+              </span>
+            </button>
+          </div>
+        ) : (
+          <div className="card-actions mt-2">
+            {" "}
+            <button
+              onClick={() => showLoginModal()}
+              className="btn btn-primary w-full group/btn"
+            >
+              View Details
+              <span
+                className="transition-transform
+                             group-hover/btn:translate-x-1"
+              >
+                →
+              </span>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

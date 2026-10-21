@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import { baseURL } from "../services/BaseURL";
+import Swal from "sweetalert2";
 
 const AuthProvider = ({ children }) => {
   const [authUser, setAuthUser] = useState(null);
@@ -27,10 +28,29 @@ const AuthProvider = ({ children }) => {
     fetchData();
   }, [accessToken]);
 
-  console.log(authUser)
+  // console.log(authUser)
+
+  const logout = () => {
+    localStorage.removeItem("user_token");
+    setAuthUser(null);
+    Swal.fire({
+      icon: "success",
+      title: "See You!",
+      text: "Logout successful!!!",
+      background: "#0f172a",
+      color: "#e2e8f0",
+      confirmButtonColor: "#60a5fa",
+      iconColor: "#60a5fa",
+      customClass: {
+        popup: "libraryhub-swal",
+        title: "libraryhub-swal-title",
+        confirmButton: "libraryhub-swal-button",
+      },
+    });
+  };
 
   return (
-    <AuthContext.Provider value={{ authUser, setAuthUser }}>
+    <AuthContext.Provider value={{ authUser, setAuthUser, logout }}>
       {children}
     </AuthContext.Provider>
   );
