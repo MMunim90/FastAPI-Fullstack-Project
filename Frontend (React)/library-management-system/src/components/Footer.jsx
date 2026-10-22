@@ -6,7 +6,9 @@ const Footer = () => {
     <footer className="footer sm:footer-horizontal mt-10 p-10 border-t-1">
       <aside>
         <img className="h-25 w-25" src="../../public/icon.png" alt="" />
-        <p className="text-2xl font-bold">LibraryHub</p>
+        <h2 className="text-2xl font-bold text-white">
+          Library<span className="text-blue-300">Hub</span>
+        </h2>
         <p>Copyright © {new Date().getFullYear()} - All right reserved</p>
       </aside>
       <aside className="md:m-auto">

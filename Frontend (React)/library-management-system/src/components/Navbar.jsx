@@ -65,7 +65,9 @@ const Navbar = () => {
         </div>
         <Link to={"/"} className="btn btn-ghost text-xl">
           <img className="h-9 w-9" src="../../public/icon.png" alt="" />
-          LibraryHub
+          <h2 className="text-xl font-bold text-white">
+              Library<span className="text-blue-300">Hub</span>
+            </h2>
         </Link>
       </div>
       <div className="navbar-center hidden lg:flex">

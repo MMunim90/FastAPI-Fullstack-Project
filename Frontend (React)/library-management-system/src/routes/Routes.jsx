@@ -8,6 +8,7 @@ import ErrorPage from "../pages/ErrorPage";
 import BookDetails from "../pages/BookDetails";
 import Dashboard from "../layout/Dashboard";
 import MyReserve from "../pages/MyReserve";
+import Forbidden from "../pages/Forbidden";
 
 const router = createBrowserRouter([
   {
@@ -41,14 +42,18 @@ const router = createBrowserRouter([
     element: <ErrorPage />,
   },
   {
+    path: "/forbidden",
+    element: <Forbidden />,
+  },
+  {
     path: "/dashboard",
     element: <Dashboard />,
     children: [
       {
         path: "myReserve",
-        element: <MyReserve/>
+        element: <MyReserve />,
       },
-    ]
+    ],
   },
 ]);
 
