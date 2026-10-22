@@ -6,6 +6,8 @@ import ContactUs from "../pages/ContactUs";
 import AllBooks from "../pages/AllBooks";
 import ErrorPage from "../pages/ErrorPage";
 import BookDetails from "../pages/BookDetails";
+import Dashboard from "../layout/Dashboard";
+import MyReserve from "../pages/MyReserve";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +39,16 @@ const router = createBrowserRouter([
   {
     path: "/*",
     element: <ErrorPage />,
+  },
+  {
+    path: "/dashboard",
+    element: <Dashboard />,
+    children: [
+      {
+        path: "myReserve",
+        element: <MyReserve/>
+      },
+    ]
   },
 ]);
 

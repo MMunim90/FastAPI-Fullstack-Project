@@ -44,8 +44,6 @@ const Login = () => {
 
       const userData = await userRes.json();
 
-      setAuthUser(userData);
-
       if (userData.detail == "User Not Found!!!") {
         toast.error("User Not Found!!!", {
           position: "top-right",
@@ -59,6 +57,7 @@ const Login = () => {
           className: "libraryhub-toast",
           progressClassName: "libraryhub-toast-progress",
         });
+        
         return;
       } else {
         document.getElementById("my_modal_3").close();
@@ -77,6 +76,8 @@ const Login = () => {
           },
         });
       }
+
+      setAuthUser(userData);
     } catch (error) {
       console.log(error);
     }

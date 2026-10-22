@@ -1,7 +1,14 @@
 import { Link } from "react-router";
 import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
-import { BookOpen, Info, Mail } from "lucide-react";
+import {
+  BookOpen,
+  Info,
+  Mail,
+  UserRound,
+  LayoutDashboard,
+  LogOut,
+} from "lucide-react";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
@@ -106,16 +113,31 @@ const Navbar = () => {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
             >
               <li>
-                <a className="justify-between">
+                <a className="flex items-center gap-2">
+                  <UserRound size={18} />
                   Profile
-                  <span className="badge">New</span>
                 </a>
               </li>
+
               <li>
-                <a>Dashboard</a>
+                <Link
+                  to="/dashboard/myReserve"
+                  className="flex items-center gap-2"
+                >
+                  <LayoutDashboard size={18} />
+                  Dashboard
+                </Link>
               </li>
+
               <li>
-                <Link to={'/'} onClick={logout}>Logout</Link>
+                <Link
+                  to="/"
+                  onClick={logout}
+                  className="flex items-center gap-2"
+                >
+                  <LogOut size={18} />
+                  Logout
+                </Link>
               </li>
             </ul>
           </div>

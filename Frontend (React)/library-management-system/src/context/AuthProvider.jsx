@@ -23,6 +23,9 @@ const AuthProvider = ({ children }) => {
 
       const userData = await userRes.json();
 
+      if (userData.detail == "User Not Found!!!"){
+        return
+      }
       setAuthUser(userData);
     }
     fetchData();
