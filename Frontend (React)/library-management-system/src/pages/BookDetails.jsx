@@ -11,12 +11,12 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import Swal from "sweetalert2";
-import { baseURL } from "../services/BaseURL"; 
+import { baseURL } from "../services/BaseURL";
 import { AuthContext } from "../context/AuthContext";
 
 const BookDetails = () => {
   const { book_id, id } = useParams();
-  console.log(id);
+  // console.log(id);
   const bookId = book_id || id;
   const navigate = useNavigate();
 
@@ -25,11 +25,12 @@ const BookDetails = () => {
   const [error, setError] = useState("");
   const [imageFailed, setImageFailed] = useState(false);
   const [reserveLoading, setReserveLoading] = useState(false);
-  const {accessToken} = useContext(AuthContext);
-//   console.log(accessToken);
+  const [reserved, setReserved] = useState(false);
+  const { accessToken } = useContext(AuthContext);
+  //   console.log(accessToken);
 
   useEffect(() => {
-    if(!id) return;
+    if (!id) return;
     const controller = new AbortController();
 
     const fetchBookDetails = async () => {
@@ -56,7 +57,7 @@ const BookDetails = () => {
 
         const data = await response.json();
         setBook(data);
-        console.log(book);
+        // console.log(book);
       } catch (err) {
         if (err.name !== "AbortError") {
           setError(err.message || "Something went wrong.");
@@ -78,17 +79,62 @@ const BookDetails = () => {
     return () => controller.abort();
   }, [bookId, id]);
 
+
+  useEffect(() => {
+  if (!accessToken || !id) {
+    setReserved(false);
+    return;
+  }
+
+  const checkReservation = async () => {
+    try {
+      const response = await fetch(`${baseURL}/reserve/my`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch reservations");
+      }
+
+      const reservations = await response.json();
+
+      const alreadyReserved = reservations.some(
+        (reservation) =>
+          String(reservation.book_id) === String(id)
+      );
+
+      setReserved(alreadyReserved);
+    } catch (error) {
+      console.error("Reservation check failed:", error);
+    }
+  };
+
+  checkReservation();
+}, [accessToken, id]);
+
   const handleReserve = async () => {
     if (!book || book.available_copies <= 0) return;
 
-    // Connect your actual reservation API here.
-    // No reservation endpoint has been provided yet.
+    const res = await fetch(`${baseURL}/reserve/${id}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    const data = await res.json();
+    console.log(data);
+
     setReserveLoading(true);
+    setReserved(true);
 
     await Swal.fire({
-      icon: "info",
-      title: "Reservation Paused",
-      text: "The reservation process is currently unavailable. Sorry for the inconvenience.",
+      icon: "success",
+      title: "Reservation successful!!!",
+      text: `${book.title} reservation successful. Wait for the Admin approval.`,
       background: "#0f172a",
       color: "#e2e8f0",
       iconColor: "#60a5fa",
@@ -99,6 +145,7 @@ const BookDetails = () => {
     });
 
     setReserveLoading(false);
+
   };
 
   const isAvailable = book?.available_copies > 0;
@@ -173,7 +220,11 @@ const BookDetails = () => {
                     <div className="absolute -bottom-20 -left-12 h-60 w-60 rounded-full border border-blue-300/10" />
 
                     <div className="relative flex w-full items-center justify-between gap-2">
-                      <img className="h-11 w-11" src="../../public/icon.png" alt="" />
+                      <img
+                        className="h-11 w-11"
+                        src="../../public/icon.png"
+                        alt=""
+                      />
                       <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-blue-200/70 sm:text-xs">
                         LibraryHub
                       </span>
@@ -323,19 +374,30 @@ const BookDetails = () => {
                   : "All copies are currently unavailable. Please check back later."}
               </p>
 
-              <button
-                type="button"
-                onClick={handleReserve}
-                disabled={!isAvailable || reserveLoading}
-                className="btn mt-5 h-12 w-full border-0 bg-blue-500 text-base font-semibold text-white shadow-lg shadow-blue-950/30 transition hover:bg-blue-400 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400 sm:w-auto sm:min-w-56"
-              >
-                {reserveLoading ? (
-                  <span className="loading loading-spinner loading-sm" />
-                ) : (
-                  <BookmarkPlus size={20} />
-                )}
-                {isAvailable ? "Reserve This Book" : "Currently Unavailable"}
-              </button>
+              {reserved ? (
+                <div className="flex items-start gap-3 rounded-xl border border-amber-400/30 bg-amber-400/10 p-4 shadow-lg shadow-amber-950/10 mt-5">
+                  <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-amber-300" />
+
+                  <p className="text-sm leading-6 text-amber-100">
+                    This book has already been reserved. Please wait for admin
+                    approval.
+                  </p>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleReserve}
+                  disabled={!isAvailable || reserveLoading}
+                  className="btn mt-5 h-12 w-full border-0 bg-blue-500 text-base font-semibold text-white shadow-lg shadow-blue-950/30 transition hover:bg-blue-400 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400 sm:w-auto sm:min-w-56"
+                >
+                  {reserveLoading ? (
+                    <span className="loading loading-spinner loading-sm" />
+                  ) : (
+                    <BookmarkPlus size={20} />
+                  )}
+                  {isAvailable ? "Reserve This Book" : "Currently Unavailable"}
+                </button>
+              )}
 
               <p className="mt-3 text-xs leading-5 text-slate-500">
                 Reservation availability depends on your library's borrowing
