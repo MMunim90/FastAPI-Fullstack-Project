@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
 import {
@@ -14,6 +14,13 @@ import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
   const { authUser, logout } = useContext(AuthContext);
+
+  const navLinkClass = ({ isActive }) =>
+    `flex items-center gap-2 rounded-lg transition-all duration-200 ${
+      isActive
+        ? "bg-blue-500/15 text-blue-300 font-semibold border border-blue-400/30"
+        : "text-slate-300 hover:bg-white/5 hover:text-blue-200"
+    }`;
 
   return (
     <div className="navbar bg-base-100 shadow-sm sticky top-0 z-50">
@@ -39,58 +46,58 @@ const Navbar = () => {
           </div>
           <ul
             tabIndex={-1}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-4 shadow gap-2"
           >
             <li>
-              <Link to="/allBooks" className="flex items-center gap-2">
-                <BookOpen size={18} className="text-blue-300" />
+              <NavLink to="/allBooks" className={navLinkClass}>
+                <BookOpen size={18} />
                 Books
-              </Link>
+              </NavLink>
             </li>
 
             <li>
-              <Link to="/about" className="flex items-center gap-2">
-                <Info size={18} className="text-blue-300" />
+              <NavLink to="/about" className={navLinkClass}>
+                <Info size={18} />
                 About Us
-              </Link>
+              </NavLink>
             </li>
 
             <li>
-              <Link to="/contact" className="flex items-center gap-2">
-                <Mail size={18} className="text-blue-300" />
+              <NavLink to="/contact" className={navLinkClass}>
+                <Mail size={18} />
                 Contact
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </div>
         <Link to={"/"} className="btn btn-ghost text-xl">
           <img className="h-9 w-9" src="../../public/icon.png" alt="" />
           <h2 className="text-xl font-bold text-white">
-              Library<span className="text-blue-300">Hub</span>
-            </h2>
+            Library<span className="text-blue-300">Hub</span>
+          </h2>
         </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
+        <ul className="menu menu-horizontal px-1 gap-8">
           <li>
-            <Link to="/allBooks" className="flex items-center gap-2">
-              <BookOpen size={18} className="text-blue-300" />
+            <NavLink to="/allBooks" className={navLinkClass}>
+              <BookOpen size={18} />
               Books
-            </Link>
+            </NavLink>
           </li>
 
           <li>
-            <Link to="/about" className="flex items-center gap-2">
-              <Info size={18} className="text-blue-300" />
+            <NavLink to="/about" className={navLinkClass}>
+              <Info size={18} />
               About Us
-            </Link>
+            </NavLink>
           </li>
 
           <li>
-            <Link to="/contact" className="flex items-center gap-2">
-              <Mail size={18} className="text-blue-300" />
+            <NavLink to="/contact" className={navLinkClass}>
+              <Mail size={18} />
               Contact
-            </Link>
+            </NavLink>
           </li>
         </ul>
       </div>
@@ -112,7 +119,7 @@ const Navbar = () => {
             </div>
             <ul
               tabIndex={-1}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-4 shadow gap-2"
             >
               <li>
                 <a className="flex items-center gap-2">
