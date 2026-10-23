@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import {
   BookOpen,
   CalendarDays,
@@ -16,6 +16,7 @@ import {
 
 import { baseURL } from "../services/BaseURL";
 import { AuthContext } from "../context/AuthContext";
+import Swal from "sweetalert2";
 
 const API_URL = `${baseURL}/reserve/my`;
 
@@ -29,46 +30,45 @@ const MyReserve = () => {
   const [activeFilter, setActiveFilter] = useState("all");
   const [refreshKey, setRefreshKey] = useState(0);
 
+  const fetchReservations = useCallback(async () => {
+    if (!accessToken) {
+      setReservations([]);
+      setError("Please log in to view your reservations.");
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch(API_URL, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          response.status === 401
+            ? "Your session has expired. Please log in again."
+            : "Failed to load your reservations.",
+        );
+      }
+
+      const data = await response.json();
+      setReservations(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }, [accessToken]);
+
   useEffect(() => {
-    const fetchReservations = async () => {
-      if (!accessToken) {
-        setReservations([]);
-        setError("Please log in to view your reservations.");
-        setLoading(false);
-        return;
-      }
-
-      setLoading(true);
-      setError("");
-
-      try {
-        const response = await fetch(API_URL, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(
-            response.status === 401
-              ? "Your session has expired. Please log in again."
-              : "Failed to load your reservations.",
-          );
-        }
-
-        const data = await response.json();
-
-        setReservations(Array.isArray(data) ? data : []);
-      } catch (err) {
-        setError(err.message || "Something went wrong. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchReservations();
-  }, [accessToken, refreshKey]);
+  fetchReservations();
+}, [fetchReservations, refreshKey]);
 
   const getStatusStyle = (status) => {
     switch (status?.toLowerCase()) {
@@ -177,7 +177,7 @@ const MyReserve = () => {
       iconBg: "bg-green-400/10",
     },
     {
-      title: "Canceled",
+      title: "Cancelled",
       value: stats.cancelled,
       icon: Ban,
       color: "text-red-300",
@@ -191,6 +191,72 @@ const MyReserve = () => {
       iconBg: "bg-red-400/10",
     },
   ];
+
+  const handleCancelReservation = async (reservationId) => {
+    const result = await Swal.fire({
+      icon: "warning",
+      title: "Cancel Reservation?",
+      text: "Are you sure you want to cancel this reservation?",
+      background: "#0f172a",
+      color: "#e2e8f0",
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#475569",
+      iconColor: "#f87171",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Cancel It",
+      cancelButtonText: "Keep Reservation",
+      reverseButtons: true,
+      customClass: {
+        popup: "libraryhub-swal",
+        title: "libraryhub-swal-title",
+        confirmButton: "libraryhub-swal-button",
+      },
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      const res = await fetch(`${baseURL}/reserve/cancel/${reservationId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const data = await res.json();
+      fetchReservations();
+
+      await Swal.fire({
+        icon: "success",
+        title: `${data.message}`,
+        text: "Your reservation has been cancelled successfully.",
+        background: "#0f172a",
+        color: "#e2e8f0",
+        confirmButtonColor: "#60a5fa",
+        iconColor: "#60a5fa",
+        customClass: {
+          popup: "libraryhub-swal",
+          title: "libraryhub-swal-title",
+          confirmButton: "libraryhub-swal-button",
+        },
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Cancellation Failed!",
+        text: "Failed to cancel the reservation. Please try again.",
+        background: "#0f172a",
+        color: "#e2e8f0",
+        confirmButtonColor: "#60a5fa",
+        iconColor: "#f87171",
+        customClass: {
+          popup: "libraryhub-swal",
+          title: "libraryhub-swal-title",
+          confirmButton: "libraryhub-swal-button",
+        },
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-900 px-4 py-10 text-slate-100 sm:px-6 lg:px-10">
@@ -290,7 +356,7 @@ const MyReserve = () => {
                 { label: "All", value: "all" },
                 { label: "Pending", value: "pending" },
                 { label: "Approved", value: "approved" },
-                { label: "Canceled", value: "canceled" },
+                { label: "Cancelled", value: "cancelled" },
                 { label: "Rejected", value: "rejected" },
               ].map((filter) => (
                 <button
@@ -399,6 +465,7 @@ const MyReserve = () => {
                         Reservation Date
                       </th>
                       <th className="px-5 py-4 font-semibold">Status</th>
+                      <th className="px-5 py-4 font-semibold">Actions</th>
                     </tr>
                   </thead>
 
@@ -457,6 +524,24 @@ const MyReserve = () => {
                               <StatusIcon size={14} />
                               {reservation.status || "Unknown"}
                             </span>
+                          </td>
+
+                          <td className="px-5 py-5">
+                            {reservation.status?.toLowerCase() === "pending" ? (
+                              <button
+                                onClick={() =>
+                                  handleCancelReservation(reservation.id)
+                                }
+                                className="inline-flex items-center gap-2 rounded-lg border border-red-400/30 bg-red-400/10 px-3 py-2 text-sm font-medium text-red-300 transition hover:border-red-400/50 hover:bg-red-400/20 hover:text-red-200"
+                              >
+                                <Ban size={15} />
+                                Cancel
+                              </button>
+                            ) : (
+                              <span className="text-xs text-slate-500">
+                                No action
+                              </span>
+                            )}
                           </td>
                         </tr>
                       );
