@@ -122,10 +122,10 @@ const Navbar = () => {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-4 shadow gap-2"
             >
               <li>
-                <a className="flex items-center gap-2">
+                <Link to={"/profile"} className="flex items-center gap-2">
                   <UserRound size={18} />
                   Profile
-                </a>
+                </Link>
               </li>
 
               <li>

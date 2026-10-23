@@ -10,6 +10,7 @@ import Dashboard from "../layout/Dashboard";
 import MyReserve from "../pages/MyReserve";
 import Forbidden from "../pages/Forbidden";
 import PrivateRoute from "./PrivateRoute";
+import UserProfile from "../pages/UserProfile";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: "/books/:id",
         element: <PrivateRoute><BookDetails /></PrivateRoute>,
+      },
+      {
+        path: "/profile",
+        element: <PrivateRoute><UserProfile /></PrivateRoute>,
       },
     ],
   },
