@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 
 const AuthProvider = ({ children }) => {
   const [authUser, setAuthUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const accessToken = localStorage.getItem("user_token");
 
@@ -12,6 +13,7 @@ const AuthProvider = ({ children }) => {
     async function fetchData() {
       if (!accessToken) {
         setAuthUser(null);
+        setLoading(false);
         return;
       }
 
@@ -27,6 +29,7 @@ const AuthProvider = ({ children }) => {
         return
       }
       setAuthUser(userData);
+      setLoading(false);
     }
     fetchData();
   }, [accessToken]);
@@ -53,7 +56,7 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ authUser, setAuthUser, logout, accessToken}}>
+    <AuthContext.Provider value={{ authUser, setAuthUser, logout, accessToken, loading}}>
       {children}
     </AuthContext.Provider>
   );

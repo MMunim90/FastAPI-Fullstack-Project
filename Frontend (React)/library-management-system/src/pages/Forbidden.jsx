@@ -4,7 +4,6 @@ import {
   LockKeyhole,
   ArrowLeft,
   House,
-  LibraryBig,
   ShieldCheck,
 } from "lucide-react";
 
@@ -80,7 +79,7 @@ const Forbidden = () => {
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <Link
               to="/"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-500 px-6 py-3 font-semibold text-white shadow-lg shadow-blue-950/30 transition hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2 focus:ring-offset-slate-900"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-500 px-6 py-3 font-semibold text-white shadow-lg shadow-blue-950/30 transition hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2 focus:ring-offset-slate-900 cursor-pointer"
             >
               <House size={18} />
               Back to Home
@@ -89,7 +88,7 @@ const Forbidden = () => {
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-blue-300/20 bg-blue-400/5 px-6 py-3 font-semibold text-blue-100 transition hover:bg-blue-400/15 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-blue-300/20 bg-blue-400/5 px-6 py-3 font-semibold text-blue-100 transition hover:bg-blue-400/15 focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer"
             >
               <ArrowLeft size={18} />
               Go Back

@@ -9,6 +9,7 @@ import BookDetails from "../pages/BookDetails";
 import Dashboard from "../layout/Dashboard";
 import MyReserve from "../pages/MyReserve";
 import Forbidden from "../pages/Forbidden";
+import PrivateRoute from "./PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -33,7 +34,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/books/:id",
-        element: <BookDetails />,
+        element: <PrivateRoute><BookDetails /></PrivateRoute>,
       },
     ],
   },
@@ -47,7 +48,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <Dashboard />,
+    element: <PrivateRoute><Dashboard /></PrivateRoute>,
     children: [
       {
         path: "myReserve",
