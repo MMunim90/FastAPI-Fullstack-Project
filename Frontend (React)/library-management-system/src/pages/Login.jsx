@@ -45,7 +45,7 @@ const Login = () => {
       const userData = await userRes.json();
 
       if (userData.detail == "User Not Found!!!") {
-        toast.error("User Not Found!!!", {
+        toast.error("Incorrect username or password", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,

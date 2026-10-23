@@ -5,6 +5,7 @@ import {
   BookmarkCheck,
   Menu,
   X,
+  UserRound
 } from "lucide-react";
 
 const Dashboard = () => {
@@ -15,6 +16,11 @@ const Dashboard = () => {
       title: "Home",
       path: "/",
       icon: Home,
+    },
+    {
+      title: "Profile",
+      path: "/profile",
+      icon: UserRound,
     },
     {
       title: "My Reservations",
